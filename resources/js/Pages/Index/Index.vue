@@ -1,7 +1,15 @@
-<template>Hello World! {{ counter }}</template>
+<template>
+    <div>Index</div>
+    <Link href="/hello">show page</Link>
+    <div>The message is {{ message }}</div>
+</template>
 
 <script setup>
-import { ref } from "vue";
-const counter = ref(0);
+import { Link } from "@inertiajs/vue3";
+import MainLayout from "../../Layouts/MainLayout.vue";
+
+defineProps({
+    message: String,
+});
 // setInterval(() => counter.value++, 1000);
 </script>
