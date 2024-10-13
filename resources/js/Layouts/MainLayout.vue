@@ -42,6 +42,12 @@
         >
             {{ flashSuccess }}
         </div>
+        <div
+            v-if="flashError"
+            class="mb-4 border rounded-md shadow-sm border-white-800 dark:border-black-800 bg-green-50 dark:bg-red-900 p-2"
+        >
+            {{ flashError }}
+        </div>
         <slot></slot>
     </main>
 </template>
@@ -52,5 +58,6 @@ import { Link, usePage } from "@inertiajs/vue3";
 
 const page = usePage();
 const flashSuccess = computed(() => page.props.flash.success);
+const flashError = computed(() => page.props.flash.error);
 const user = computed(() => page.props.user);
 </script>

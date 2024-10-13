@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ListingController extends Controller
 {
@@ -66,6 +67,12 @@ class ListingController extends Controller
 
     public function edit(Listing $listing)
     {
+        $response = Gate::inspect('update', $listing);
+        if (!$response->allowed()) {
+            return redirect()->route('listing.index')
+                ->with('error', 'Listing not accesible.');
+        }
+
         return inertia(
             'Listing/Edit',
             [
@@ -94,6 +101,12 @@ class ListingController extends Controller
 
     public function destroy(Listing $listing)
     {
+        $response = Gate::inspect('delete', $listing);
+        if (!$response->allowed()) {
+            return redirect()->route('listing.index')
+                ->with('error', 'Listing not accesible.');
+        }
+
         $listing->delete();
 
         return redirect()->back()->with('success', 'Listing was deleted!');
