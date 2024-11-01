@@ -5,6 +5,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\RealtorListingController;
+use App\Http\Controllers\RealtorListingImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index']);
@@ -23,6 +24,9 @@ Route::prefix('realtor')->name('realtor.')->middleware('auth')
         Route::resource('listing', RealtorListingController::class)
             ->only(['index', 'destroy', 'edit', 'update', 'create', 'store'])
             ->withTrashed();
+
+        Route::resource('listing.image', RealtorListingImageController::class)
+            ->only(['create', 'store', 'destroy']);
     });
 
 Route::get('login', [AuthController::class, 'create'])->name('login');
