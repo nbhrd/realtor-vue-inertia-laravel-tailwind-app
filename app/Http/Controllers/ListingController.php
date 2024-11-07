@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class ListingController extends Controller
@@ -40,7 +41,11 @@ class ListingController extends Controller
             'Listing/Index',
             [
                 'filters' => $filters,
-                'listings' => Listing::mostRecent()->filter($filters)->paginate(10)->withQueryString(),
+                'listings' => Listing::mostRecent()
+                    ->filter($filters)
+                    ->withoutSold()
+                    ->paginate(10)
+                    ->withQueryString(),
             ]
         );
     }
@@ -51,11 +56,13 @@ class ListingController extends Controller
     public function show(Listing $listing)
     {
         $listing->load(['images']);
+        $offer = !Auth::user() ? null : $listing->offers()->ByMe()->first();
 
         return inertia(
             'Listing/Show',
             [
                 'listing' => $listing,
+                'offerMade' => $offer,
             ]
         );
     }
